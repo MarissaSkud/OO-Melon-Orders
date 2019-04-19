@@ -1,5 +1,7 @@
 """Classes for melon orders."""
 
+from random import randint
+
 class AbstractMelonOrder():
     '''A melon order anywhere in the world'''
 
@@ -8,20 +10,24 @@ class AbstractMelonOrder():
         self.qty = qty
         self.shipped = False
 
-    def get_total(self):
-        """Calculate price, including tax."""
-        
-        base_price = 5
+    def get_base_price(self):
+
+        base_price = randint(5,9)
 
         if self.species.lower() == "christmas melon":
             base_price = base_price * 1.5
+
+        return base_price
+
+    def get_total(self):
+        """Calculate price, including tax."""
 
         intl_small_order_fee = 0
 
         if self.order_type == "international" and self.qty < 10:
             intl_small_order_fee = 3
 
-        total = (1 + self.tax) * self.qty * base_price + intl_small_order_fee
+        total = (1 + self.tax) * self.qty * self.get_base_price() + intl_small_order_fee
 
         return total
 
